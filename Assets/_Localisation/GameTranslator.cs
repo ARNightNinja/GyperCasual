@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Linq;
+
 namespace KreizTranslation
 {
     public class GameTranslator : MonoBehaviour
@@ -12,8 +12,7 @@ namespace KreizTranslation
         public GameObject UIHolderObject;
         public bool DeleteAllTextLanguages;
         [HideInInspector] public string LabelText = "";
-        public TMP_FontAsset TMP_Font;
-        public Font UnityUI_Font;
+        public TMP_FontAsset FontAsset;
 
         public void StartTranslationProcess(List<GameObject> sceneObjects)
         {

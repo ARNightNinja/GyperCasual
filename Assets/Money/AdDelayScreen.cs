@@ -17,7 +17,7 @@ public class AdDelayScreen : MonoBehaviour
     public void ShowDelay()
     {
         if (countDown != null) return;
-
+        
         if (countDown != null)
             StopCoroutine(countDown);
         countDown = StartCoroutine(CountDown());
@@ -27,6 +27,7 @@ public class AdDelayScreen : MonoBehaviour
     IEnumerator CountDown()
     {
         IsInCountDown = true;
+        AdsManager.PauseForAd();
         _canvas.enabled = true;
         countDownT.text = "3";
         yield return new WaitForSecondsRealtime(0.7f);
@@ -36,7 +37,7 @@ public class AdDelayScreen : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.7f);
         _canvas.enabled = false;
         IsInCountDown = false;
-        AdsManager.Instance.ShowAd(AdsManager.AdType.Interstitial);
+        AdsManager.Instance.ShowInterstitial();
         countDown = null;
 
     }

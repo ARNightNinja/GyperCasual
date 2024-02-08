@@ -4,15 +4,14 @@ using InstantGamesBridge.Modules.Game;
 using InstantGamesBridge.Modules.Platform;
 using UnityEngine;
 
-public class AdsManager : MonoBehaviour
+public partial class AdsManager : MonoBehaviour
 {
 #if !UNITY_EDITOR
-    public const int INT_DEALY = 90;
+    const int INT_DEALY = 120;
 #else
-    public const int INT_DEALY = 10;
+    const int INT_DEALY = 120;
 #endif
     public static AdsManager Instance;
-    AdType activeAdType = AdType.Interstitial;
     [SerializeField] AdDelayScreen adDelayScreen;
     private void Awake()
     {
@@ -82,7 +81,7 @@ public class AdsManager : MonoBehaviour
     {
         if (Time.unscaledTime - lastRVTime < 10)
         {
-            Debug.Log("Rewarded ad was jsut recently");
+            Debug.Log("Rewarded ad was just recently");
             return;
         }
         if (Time.unscaledTime - lastPingTime > INT_DEALY)
@@ -90,77 +89,46 @@ public class AdsManager : MonoBehaviour
             if(adDelayScreen!=null)
             {
                 Debug.Log("ShowAd with delay");
+                //SettingsMenu.Instance.Pause();
                 timePingDelay = Time.unscaledTime;
+                lastPingTime = Time.unscaledTime;
                 adDelayScreen.ShowDelay();
                 return;
             }
-            if (ShowAd(AdType.Interstitial))
-            {
-                Debug.Log("Ping pop ad: ShowAd");
-                lastPingTime = Time.unscaledTime;
-            }
-
+            ShowInterstitial();
+            lastPingTime = Time.unscaledTime;
         }
         else
         {
             Debug.Log("Next ad ping in:" + (INT_DEALY - (int)(Time.unscaledTime - lastPingTime)));
         }
     }
-    public bool isAdReady(AdType adType)
-    {
-        if (adType == AdType.Interstitial)
-        {
-            return (Time.unscaledTime - lastPingTime > INT_DEALY);
-        }
-        else
-        {
-            return true;
-        }
-    }
     float lastRVTime = 0;
-    public void RewardUser()
-    {
-        lastRVTime = Time.unscaledTime;
-        Debug.LogError("RewardUser:"+ activeAdType.ToString());
-        if (activeAdType == AdType.RewardedMap)
-        {
-            
-                Debug.LogError("LevelMenu.Instance == null");
-            
-        }
-    }
-    public bool ShowAd(AdType adType)
-    {
-        if (adType == AdType.Interstitial)
-        {
-            if (isAdReady(adType))
-            {
-                ShowInterstitial();
-                return true;
-            }
-            return false;
-
-        }
-        else
-        {
-            lastRVTime = Time.unscaledTime;
-            activeAdType = adType;
-            ShowReward();
-            return true;
-        }
-    }
-    void ShowInterstitial()
+    
+    public void ShowInterstitial()
     {
         Debug.Log("Called ShowInterstitial");
         Bridge.advertisement.ShowInterstitial();
-        //YandexSDK.YaSDK.instance.ShowInterstitial();
+#if UNITY_EDITOR
+        UnPauseForAd();
+#endif
+    }
+    public void ShowRewardedAd(RewardType adType)
+    {
+        lastRVTime = Time.unscaledTime;
+        activeRewardType = adType;
+        ShowReward();
     }
     void ShowReward()
     {
-        Debug.Log("Called ShowReward");
+        Debug.Log("Called ShowRewardedAd");
         Bridge.advertisement.ShowRewarded();
-        //YandexSDK.YaSDK.instance.ShowRewarded("rv_klg");
+        lastRVTime = Time.unscaledTime;
+#if UNITY_EDITOR
+        UnPauseForAd();
+#endif
     }
+
     private void OnInterstitialStateChanged(InterstitialState state)
     {
         Debug.Log("OnInterstitialStateChanged" + state);
@@ -169,14 +137,15 @@ public class AdsManager : MonoBehaviour
             case InterstitialState.Loading:
                 break;
             case InterstitialState.Failed:
-                isInAd = false;
+                lastPingTime = Time.unscaledTime - INT_DEALY/2f;
+                UnPauseForAd();
                 break;
             case InterstitialState.Opened:
                 lastPingTime = Time.unscaledTime;
-                AdStarted();
+                PauseForAd();
                 break;
             case InterstitialState.Closed:
-                AdClosed();
+                UnPauseForAd();
                 break;
         }
 
@@ -189,13 +158,13 @@ public class AdsManager : MonoBehaviour
             case RewardedState.Loading:
                 break;
             case RewardedState.Failed:
-                isInAd = false;
+                UnPauseForAd();
                 break;
             case RewardedState.Opened:
-                AdStarted();
+                PauseForAd();
                 break;
             case RewardedState.Closed:
-                AdClosed();
+                UnPauseForAd();
                 break;
             case RewardedState.Rewarded:
                 RewardUser();
@@ -203,15 +172,20 @@ public class AdsManager : MonoBehaviour
         }
     }
 
-    float timeScaleWas = 1f;
-    bool isInAd = false;
-    float timePingDelay = 0f;
-    public bool IsInAd()
+    private static float timeScaleWas = 1f;
+    private static bool isInAd = false;
+    protected float timePingDelay = 0f;
+    public static bool IsInAd()
     {
-        return isInAd || (Time.unscaledTime- timePingDelay < 2.5f);
+        if (Instance == null) return false;
+
+        if (isInAd) return true;
+        if (Time.unscaledTime - Instance.timePingDelay < 3f) return true;
+        if (AdDelayScreen.IsInCountDown) return true;
+
+        return false;
     }
-    //EventSystem disabledEventSys = null;
-    void AdStarted()
+    public static void PauseForAd()
     {
         if (isInAd) return;
         isInAd = true;
@@ -219,28 +193,15 @@ public class AdsManager : MonoBehaviour
         timeScaleWas = Time.timeScale;
         Time.timeScale = 0f;
         AudioListener.volume = 0f;
-        /*if (EventSystem.current != null)
-        {
-            disabledEventSys = EventSystem.current;
-            EventSystem.current.enabled = false;
-        }*/
-        Debug.Log("AdStarted TimeScaleWas:" + timeScaleWas);
     }
-    void AdClosed()
+    public static void UnPauseForAd()
     {
         if (!isInAd) return;
         isInAd = false;
 
-        /*if(EventSystem.current!=null) EventSystem.current.enabled = true;
-        if(disabledEventSys != null) disabledEventSys.enabled = true;*/
         GlobalVolumeManager.UnMuteSoundAd();
         Time.timeScale = timeScaleWas;
         Debug.Log("AdClosed TimeScaleWas:" + timeScaleWas);
     }
-    public enum AdType
-    {
-        Interstitial,
-        RewardedMap
-
-    }
+   
 }

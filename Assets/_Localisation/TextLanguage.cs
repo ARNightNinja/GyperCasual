@@ -4,12 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEditor;
+
 namespace KreizTranslation
 {
     public class TextLanguage : MonoBehaviour
     {
-        [SerializeField, TextArea] string _textRU;
-        [SerializeField, TextArea] string _textENG;
+        [SerializeField, TextArea] public string _textRU = "";
+        [SerializeField, TextArea] public string _textENG = "";
+        [SerializeField, TextArea] public string _textES = "";
+        [SerializeField, TextArea] public string _textDE = "";
+        [SerializeField, TextArea] public string _textCN = "";
+        [SerializeField, TextArea] public string _textTR = "";
+        [SerializeField, TextArea] public string _textJP = "";
+        [SerializeField, TextArea] public string _textID = "";
         string curTextLang = "-";
         // Start is called before the first frame update
         void Start()
@@ -18,7 +26,8 @@ namespace KreizTranslation
         }
         private void OnEnable()
         {
-            RefreshText();
+            if(LanguageManager.Instance)
+                RefreshText();
             //LanguageManager.Instance.onChangeLang += RefreshText;
         }
         private void OnDisable()
@@ -27,23 +36,167 @@ namespace KreizTranslation
         }
         public void RefreshText()
         {
-            string langStr = PlayerPrefs.GetString("Language", "ENG");
+            string langStr = LanguageManager.GetLanguage();
             if (langStr == curTextLang) return;
 
+            //Debug.Log("RefreshText: new lang:" + langStr + " ", gameObject);
             if (langStr == "RU")
             {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._RU_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._RU_Legacy_Font;
+                }
                 ChangeTextTo(_textRU);
+            }
+            else if (langStr == "ENG")
+            {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._ENG_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._ENG_Legacy_Font;
+                }
+                ChangeTextTo(_textENG);
+            }
+            else if (langStr == "ES")
+            {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._ENG_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._ENG_Legacy_Font;
+                }
+                ChangeTextTo(_textES);
+            }
+            else if (langStr == "DE")
+            {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._ENG_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._ENG_Legacy_Font;
+                }
+                ChangeTextTo(_textDE);
+            }
+            else if (langStr == "CN")
+            {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._CN_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._CN_Legacy_Font;
+                }
+                ChangeTextTo(_textCN);
+
+               /* if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    //tmpCtext.font = LanguageManager.Instance._CN_Font;
+                    if (_FONTProcessing != null)
+                        StopCoroutine(_FONTProcessing);
+                    _FONTProcessing = StartCoroutine(DelayedRefreshToUIFont(LanguageManager.Instance._CN_Legacy_Font, _textCN));
+                    return;
+                }
+                ChangeTextTo(_textCN);*/
+            }
+            else if (langStr == "TR")
+            {
+
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._ENG_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._ENG_Legacy_Font;
+                }
+                ChangeTextTo(_textTR);
+            }
+            else if (langStr == "JP")
+            {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._CN_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._CN_Legacy_Font;
+                }
+                ChangeTextTo(_textJP);
+
+                /*if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    if (_FONTProcessing != null)
+                        StopCoroutine(_FONTProcessing);
+                    _FONTProcessing = StartCoroutine(DelayedRefreshToUIFont(LanguageManager.Instance._CN_Legacy_Font, _textJP));
+                    return;
+                }
+                ChangeTextTo(_textJP);*/
+            }
+            else if (langStr == "ID")
+            {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._ENG_Font;
+                }
+                else if (TryGetComponent<Text>(out Text legacyCtext) && LanguageManager.Instance)
+                {
+                    legacyCtext.font = LanguageManager.Instance._ENG_Legacy_Font;
+                }
+                ChangeTextTo(_textID);
             }
             else
             {
+                if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext) && LanguageManager.Instance)
+                {
+                    tmpCtext.font = LanguageManager.Instance._ENG_Font;
+                }
                 ChangeTextTo(_textENG);
             }
+        }
+        Coroutine _FONTProcessing;
+        bool isInRefreshFONT = false;
+        IEnumerator DelayedRefreshToUIFont(Font newFont, string newText)
+        {
+            if (isInRefreshFONT) yield break;
+            yield return null;
+            isInRefreshFONT = true;
+            float maxSize = 50;
+            if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext))
+            {
+                //tmpCtext.font = LanguageManager.Instance._CN_Font;
+                maxSize = tmpCtext.fontSizeMax*1.25f;
+                Destroy(tmpCtext);
+                /*if (TryGetComponent<Doozy.Runtime.Reactor.Targets.TextMeshProColorTarget>(out Doozy.Runtime.Reactor.Targets.TextMeshProColorTarget tmpTarget))
+                {
+                    Destroy(tmpTarget);
+                }*/
+            }
+            yield return null;
+            Text legacyText = gameObject.AddComponent<Text>();
+            legacyText.alignment = TextAnchor.MiddleCenter;
+            legacyText.resizeTextForBestFit = true;
+            legacyText.resizeTextMaxSize = (int)maxSize;
+            legacyText.font = newFont;
+            ChangeTextTo(newText);
+            _FONTProcessing = null;
         }
         void ChangeTextTo(string _text)
         {
             if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext))
             {
-                tmpCtext.text = _text;
+                tmpCtext.text = _text; 
             }
             if (TryGetComponent<Text>(out Text uiCtext))
             {
@@ -99,7 +252,12 @@ namespace KreizTranslation
             {
                 if (tmpCtext.text.Length == 0)
                 {
-                    return _textENG;
+                    if (_textENG.Length!=0)
+                        return _textENG;
+                    if (_textCN.Length != 0)
+                        return _textCN;
+                    if (_textRU.Length != 0)
+                        return _textRU;
                 }
                 return tmpCtext.text.Trim('\n');
             }
@@ -107,7 +265,12 @@ namespace KreizTranslation
             {
                 if (uiCtext.text.Length == 0)
                 {
-                    return _textENG;
+                    if (_textENG.Length != 0)
+                        return _textENG;
+                    if (_textCN.Length != 0)
+                        return _textCN;
+                    if (_textRU.Length != 0)
+                        return _textRU;
                 }
                 return uiCtext.text.Trim('\n');
             }
@@ -120,36 +283,68 @@ namespace KreizTranslation
             translated = true;
             _textENG = newText;
         }
+        public void SetTralsationES(string newText)
+        {
+            if (newText.Length == 0) return;
+            translated = true;
+            _textES = newText;
+        }
+        public void SetTralsationDE(string newText)
+        {
+            if (newText.Length == 0) return;
+            translated = true;
+            _textDE = newText;
+        }
+        public void SetTralsationID(string newText)
+        {
+            if (newText.Length == 0) return;
+            translated = true;
+            _textID = newText;
+        }
         public void SetTralsationRU(string newText)
         {
             if (newText.Length == 0) return;
             translated = true;
             _textRU = newText;
         }
+        public void SetTralsationCN(string newText)
+        {
+            if (newText.Length == 0) return;
+            translated = true;
+            _textCN = newText;
+        }
+        public void SetTralsationTR(string newText)
+        {
+            if (newText.Length == 0) return;
+            translated = true;
+            _textTR = newText;
+        }
+        public void SetTralsationJP(string newText)
+        {
+            if (newText.Length == 0) return;
+            translated = true;
+            _textJP = newText;
+        }
         [SerializeField] bool translated = false;
         public bool IsTranslated()
         {
             if (_textRU.Length == 0) return false;
             if (_textENG.Length == 0) return false;
-            int diff = Mathf.Abs(_textRU.Length - _textENG.Length);
-            if ((float)diff / (float)Mathf.Max(_textRU.Length, _textENG.Length) < 0.5f)
+            if (_textCN.Length == 0) return false;
+            int diff1 = Mathf.Abs(_textRU.Length - _textENG.Length);
+            int diff2 = Mathf.Abs(_textRU.Length - _textCN.Length);
+            if ((float)diff1 / (float)Mathf.Max(_textRU.Length, _textENG.Length) < 0.5f
+                && (float)diff2 / (float)Mathf.Max(_textRU.Length, _textCN.Length) < 0.8f )
             {
-                //Debug.Log("diff:" + diff + " max:" + Mathf.Max(_textRU.Length, _textENG.Length), gameObject);
                 return true;
             }
             return translated;
         }
-        public void UpdateFont(TMP_FontAsset font, Font fontBasic)
+        public void UpdateFont(TMP_FontAsset font)
         {
             if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext))
             {
-                if(font!=null)
-                    tmpCtext.font = font;
-            }
-            else if (TryGetComponent<Text>(out Text uiCtext))
-            {
-                if(fontBasic!=null)
-                    uiCtext.font = fontBasic;
+                tmpCtext.font = font;
             }
         }
         public void DisplayRU()
@@ -174,12 +369,23 @@ namespace KreizTranslation
                 uiCtext.text = _textRU;
             }
         }
+        public void DisplayCN()
+        {
+            if (TryGetComponent<TMP_Text>(out TMP_Text tmpCtext))
+            {
+                tmpCtext.text = _textCN;
+            }
+            else if (TryGetComponent<Text>(out Text uiCtext))
+            {
+                uiCtext.text = _textCN;
+            }
+        }
         public void StartTranslationProcessToENG()
         {
             string textToTranslate = _textRU;
             if (textToTranslate.Length == 0)
                 textToTranslate = GetDefaultText();
-            StartCoroutine(Translation(GetDefaultText(), "en"));
+            StartCoroutine(Translation(textToTranslate, "en"));
         }
         public void StartTranslationProcessToRU()
         {
@@ -187,7 +393,48 @@ namespace KreizTranslation
             if (textToTranslate.Length == 0)
                 textToTranslate = GetDefaultText();
             StartCoroutine(Translation(textToTranslate, "ru"));
-            
+        }
+        public void StartTranslationProcessToCN()
+        {
+            string textToTranslate = _textENG;
+            if (textToTranslate.Length == 0)
+                textToTranslate = GetDefaultText();
+            StartCoroutine(Translation(textToTranslate, "zh-CN")); //zh-TW
+        }
+        public void StartTranslationProcessToTR()
+        {
+            string textToTranslate = _textENG;
+            if (textToTranslate.Length == 0)
+                textToTranslate = GetDefaultText();
+            StartCoroutine(Translation(textToTranslate, "tr"));
+        }
+        public void StartTranslationProcessToJP()
+        {
+            string textToTranslate = _textENG;
+            if (textToTranslate.Length == 0)
+                textToTranslate = GetDefaultText();
+            StartCoroutine(Translation(textToTranslate, "ja"));
+        }
+        public void StartTranslationProcessToES()
+        {
+            string textToTranslate = _textENG;
+            if (textToTranslate.Length == 0)
+                textToTranslate = GetDefaultText();
+            StartCoroutine(Translation(textToTranslate, "es"));
+        }
+        public void StartTranslationProcessToDE()
+        {
+            string textToTranslate = _textENG;
+            if (textToTranslate.Length == 0)
+                textToTranslate = GetDefaultText();
+            StartCoroutine(Translation(textToTranslate, "de"));
+        }
+        public void StartTranslationProcessToID()
+        {
+            string textToTranslate = _textENG;
+            if (textToTranslate.Length == 0)
+                textToTranslate = GetDefaultText();
+            StartCoroutine(Translation(textToTranslate, "id"));
         }
         public IEnumerator Translation(string sourceText, string targetLang)
         {
@@ -210,10 +457,25 @@ namespace KreizTranslation
 
                     translatedString = translatedString.Substring(4);
 
-                    if(targetLang=="ru")
+                    if (targetLang == "ru")
                         SetTralsationRU(FixString(translatedString));
                     else if (targetLang == "en")
                         SetTralsationENG(FixString(translatedString));
+                    else if (targetLang == "zh-CN")
+                        SetTralsationCN(FixString(translatedString));
+                    else if (targetLang == "tr")
+                        SetTralsationTR(FixString(translatedString));
+                    else if (targetLang == "ja")
+                        SetTralsationJP(FixString(translatedString));
+                    else if (targetLang == "es")
+                        SetTralsationES(FixString(translatedString));
+                    else if (targetLang == "de")
+                        SetTralsationDE(FixString(translatedString));
+                    else if (targetLang == "id")
+                        SetTralsationID(FixString(translatedString));
+#if UNITY_EDITOR
+                    EditorUtility.SetDirty(this);
+#endif
                 }
                 else
                 {
@@ -258,6 +520,15 @@ namespace KreizTranslation
             }
 
             return strToFix;
+        }
+
+        const string SplitSimbolToFile = "|";
+        public string GetAllLanguagesStringToFile()
+        {
+            string toReturn = _textRU.Trim('\n') + SplitSimbolToFile +
+                _textENG.Trim('\n') + SplitSimbolToFile +
+                _textCN.Trim('\n');
+            return toReturn;
         }
     }
 }

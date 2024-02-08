@@ -34,7 +34,6 @@ RectTransform:
   - {fileID: 2108914589311780097}
   - {fileID: 2108914588549914675}
   m_Father: {fileID: 2108914590030099136}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -62,14 +61,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7e77f21e03365044e9dc0bac803453e4, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -137,7 +136,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2108914588345212384}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -174,8 +172,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2cdb29d6c3dcda84d9719312f2251f33, type: 2}
-  m_sharedMaterial: {fileID: 1259856202934462572, guid: 2cdb29d6c3dcda84d9719312f2251f33, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -257,7 +255,7 @@ MonoBehaviour:
   _textENG: Ad in
   _textES: 
   _textDE: 
-  _textCN: "\u5E7F\u544A\u5728"
+  _textCN: 
   _textTR: 
   _textJP: 
   _textID: 
@@ -294,7 +292,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2108914588345212384}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -331,8 +328,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0414\u043E \u0440\u0435\u043A\u043B\u0430\u043C\u044B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2cdb29d6c3dcda84d9719312f2251f33, type: 2}
-  m_sharedMaterial: {fileID: 1259856202934462572, guid: 2cdb29d6c3dcda84d9719312f2251f33, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -414,7 +411,7 @@ MonoBehaviour:
   _textENG: Ad in
   _textES: Anuncio en
   _textDE: Anzeige ein
-  _textCN: "\u5E7F\u544A\u5728"
+  _textCN: "\u5E7F\u544A\u8F93\u5165"
   _textTR: "Reklam giri\u015Fi"
   _textJP: "\u5E83\u544A\u30A4\u30F3"
   _textID: Iklan masuk
@@ -451,7 +448,6 @@ RectTransform:
   m_Children:
   - {fileID: 2108914590030099136}
   m_Father: {fileID: 2108914590019688437}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -508,7 +504,7 @@ GameObject:
   - component: {fileID: 2108914590019688438}
   - component: {fileID: 2108914590019688439}
   - component: {fileID: 2108914590019688436}
-  - component: {fileID: 6548101755516967999}
+  - component: {fileID: 4207719827700759392}
   m_Layer: 0
   m_Name: AdDelay - Canvas
   m_TagString: Untagged
@@ -530,7 +526,6 @@ RectTransform:
   m_Children:
   - {fileID: 2108914589575849545}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -554,7 +549,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 10
   m_TargetDisplay: 0
@@ -598,7 +595,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6548101755516967999
+--- !u!114 &4207719827700759392
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -607,7 +604,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2108914590019688434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f7c398c47c5f7641b891ec14a5be6f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fe19b5f5b904e541b4485c44e0dac7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   countDownT: {fileID: 2108914588549914677}
@@ -644,7 +641,6 @@ RectTransform:
   m_Children:
   - {fileID: 2108914588345212384}
   m_Father: {fileID: 2108914589575849545}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}

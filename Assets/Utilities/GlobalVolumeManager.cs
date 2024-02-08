@@ -5,8 +5,11 @@ public class GlobalVolumeManager : MonoBehaviour
 {
     //public static GlobalVolumeManager Instance;
     public static bool AdMuted = false;
+    public static bool PauseMuted = false;
     public static bool FocusMuted = false;
     public static bool PlayerMuted = false;
+    public static bool FakeLoading = false;
+
     public static bool ReducedVol = false;
 
     /*private void Awake()
@@ -18,11 +21,11 @@ public class GlobalVolumeManager : MonoBehaviour
     }*/
     static bool IsMutedAnyType()
     {
-        return AdMuted || FocusMuted || PlayerMuted;
+        return AdMuted || FocusMuted || PlayerMuted || PauseMuted || FakeLoading;
     }
     public static void SetNewVolume(float newVol)
     {
-        if (AdMuted || FocusMuted || PlayerMuted)
+        if (IsMutedAnyType())
         {
             volumeWasMute = newVol;
             if (ReducedVol)
@@ -38,11 +41,30 @@ public class GlobalVolumeManager : MonoBehaviour
         Debug.Log("SetNewVol:" + (int)(AudioListener.volume * 100));
     }
 
-    static float volumeWasMute = PlayerPrefs.GetFloat("Volume", 0.1f);
+    static float volumeWasMute = 0.4f;
     static void SaveMuteVol()
     {
         if (!IsMutedAnyType() && AudioListener.volume > 0)
             volumeWasMute = AudioListener.volume;
+        if (volumeWasMute == 1)
+            volumeWasMute = 0.4f;
+    }
+    public static void MuteSoundFakeLoading()
+    {
+        if (FakeLoading) return;
+
+        SaveMuteVol();
+
+        FakeLoading = true;
+
+        UpdateMuteState();
+    }
+    public static void UnMuteSoundFakeLoading()
+    {
+        if (!FakeLoading) return;
+        FakeLoading = false;
+
+        UpdateMuteState();
     }
     public static void MuteSoundPlayer()
     {
@@ -58,6 +80,23 @@ public class GlobalVolumeManager : MonoBehaviour
     {
         if (!PlayerMuted) return;
         PlayerMuted = false;
+
+        UpdateMuteState();
+    }
+    public static void MuteSoundPause()
+    {
+        if (PauseMuted) return;
+
+        SaveMuteVol();
+
+        PauseMuted = true;
+
+        UpdateMuteState();
+    }
+    public static void UnMuteSoundPause()
+    {
+        if (!PauseMuted) return;
+        PauseMuted = false;
 
         UpdateMuteState();
     }
@@ -111,7 +150,7 @@ public class GlobalVolumeManager : MonoBehaviour
             AudioListener.pause = false;
         }
     }
-    
+
 
 
 
@@ -120,6 +159,7 @@ public class GlobalVolumeManager : MonoBehaviour
     {
         if (ReducedVol || IsMutedAnyType()) return;
         ReducedVol = true;
+        MuteSoundPause();
 
         volumeReducedWas = AudioListener.volume;
         AudioListener.volume = volumeReducedWas / 3.25f;
@@ -131,6 +171,7 @@ public class GlobalVolumeManager : MonoBehaviour
     {
         if (!ReducedVol || IsMutedAnyType()) return;
         ReducedVol = false;
+        UnMuteSoundPause();
 
         //Debug.Log((int)(100f * volumeReducedWas) + " UnReduceSound " + Time.unscaledTime);
         AudioListener.volume = volumeReducedWas;
